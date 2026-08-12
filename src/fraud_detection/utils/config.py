@@ -101,7 +101,18 @@ def _merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
 
 
 def project_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+    configured_root = os.getenv("FRAUD_PROJECT_ROOT")
+    if configured_root:
+        return Path(configured_root).expanduser().resolve()
+
+    source_checkout = Path(__file__).resolve().parents[3]
+    if (source_checkout / "configs/base.yaml").is_file():
+        return source_checkout
+
+    working_directory = Path.cwd().resolve()
+    if (working_directory / "configs/base.yaml").is_file():
+        return working_directory
+    return source_checkout
 
 
 def load_settings(profile: str | None = None) -> Settings:

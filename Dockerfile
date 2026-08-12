@@ -9,7 +9,7 @@ RUN python -m pip install --upgrade pip && python -m pip wheel --wheel-dir /whee
 
 FROM python:3.12-slim AS runtime
 WORKDIR /app
-ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 FRAUD_PROJECT_ROOT=/app
 RUN apt-get update && apt-get install -y --no-install-recommends curl libgomp1 && rm -rf /var/lib/apt/lists/* \
     && useradd --create-home --uid 10001 fraud
 COPY --from=builder /wheels /wheels
