@@ -1,0 +1,9 @@
+.git
+.venv
+data/raw
+data/processed
+artifacts/model
+mlruns
+reports/tmp
+__pycache__
+*.pyc

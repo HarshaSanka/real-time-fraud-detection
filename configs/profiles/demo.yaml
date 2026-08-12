@@ -1,0 +1,9 @@
+profile: demo
+data:
+  maximum_rows: 50000
+model:
+  tuning_trials: 2
+  tuning_sample_rows: 30000
+  random_forest_estimators: 50
+execution:
+  max_threads: 2

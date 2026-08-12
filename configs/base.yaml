@@ -1,0 +1,52 @@
+project:
+  name: real-time-fraud-detection
+  seed: 42
+  pseudonym_salt: sparkov-portfolio-v1
+data:
+  url: https://www.kaggle.com/api/v1/datasets/download/kartik2112/fraud-detection
+  archive_sha256: 4e32829b9ba5a6b17af707c513c15204011044df0e8971e431cedca3d8c0a8a1
+  files:
+    fraudTrain.csv: fd7139200dbfcbed0b6742bbe05a4f1abce532c4fef20918228a651647a3e75d
+    fraudTest.csv: 12d553ab19440c752d2531ee1af44bb64f12cc3d3839f1649f19e81c230545f0
+  expected_rows: 1852394
+  expected_fraud: 9651
+  label_delay_days: 7
+splits:
+  train_start: 2019-01-01T00:00:00
+  tune_start: 2020-01-01T00:00:00
+  calibration_start: 2020-04-01T00:00:00
+  threshold_start: 2020-06-01T00:00:00
+  test_start: 2020-07-01T00:00:00
+  end: 2021-01-01T00:00:00
+risk:
+  review_cost: 5.0
+  review_capture_rate: 0.80
+  false_block_cost: 25.0
+  maximum_review_rate: 0.05
+  maximum_block_rate: 0.01
+  minimum_fraud_dollar_capture: 0.80
+  fallback_review_threshold: 0.30
+  fallback_block_threshold: 0.75
+model:
+  tuning_trials: 20
+  tuning_sample_rows: 250000
+  random_forest_estimators: 300
+  calibration_method: isotonic
+  minimum_calibration_positives: 100
+  primary_metric: pr_auc
+serving:
+  model_bundle: artifacts/model/current
+  database_url: sqlite:///predictions/fraud.db
+  redis_url: redis://localhost:6379/0
+  kafka_bootstrap_servers: localhost:9092
+  batch_limit: 100
+  live_max_age_hours: 24
+  future_tolerance_minutes: 5
+monitoring:
+  psi_warning: 0.10
+  psi_critical: 0.20
+  js_warning: 0.10
+  minimum_labels: 200
+  minimum_fraud_labels: 20
+  performance_relative_drop: 0.10
+  cost_relative_increase: 0.15

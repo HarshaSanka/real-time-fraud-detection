@@ -1,0 +1,9 @@
+profile: portfolio
+data:
+  maximum_rows: null
+model:
+  tuning_trials: 20
+  tuning_sample_rows: 250000
+  random_forest_estimators: 300
+execution:
+  max_threads: 6

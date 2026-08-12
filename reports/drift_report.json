@@ -1,0 +1,41 @@
+{
+  "status": "critical",
+  "reference_window": "2019-01-01 through 2019-12-31",
+  "current_window": "2020-07-01 through 2020-12-31",
+  "numeric_psi": {
+    "amount": 6.78169148540923e-05,
+    "log_amount": 6.78169148540923e-05,
+    "hour_sin": 1.659202025477525e-05,
+    "hour_cos": 1.538668308502047e-05,
+    "weekday_sin": 0.053367155967495056,
+    "weekday_cos": 0.05211497842524482,
+    "is_weekend": 0.0,
+    "home_merchant_distance_km": 3.366412113332121e-05,
+    "log_city_population": 9.081492922228809e-05,
+    "customer_avg_amount_7d": 0.0036560172998602717,
+    "customer_avg_amount_30d": 0.005247328410347801,
+    "amount_vs_customer_avg_30d": 0.00014675067003766746,
+    "customer_transactions_5m": 0.0,
+    "customer_transactions_30m": 0.0,
+    "customer_transactions_1h": 0.0021515964772795848,
+    "customer_transactions_24h": 0.023102259380838562,
+    "customer_amount_1h": 0.0012546759272883466,
+    "customer_unique_merchants_1h": 0.0021515964772795848,
+    "time_since_previous_seconds": 0.007314396987302083,
+    "distance_from_previous_km": 7.877854122776513e-06,
+    "travel_speed_kmh": 0.00609474581733709,
+    "impossible_travel_flag": 0.0,
+    "customer_confirmed_fraud_rate": 0.9893147840327218,
+    "merchant_transactions_24h": 0.033366138867030215,
+    "merchant_avg_amount_30d": 0.0024553253885434825,
+    "merchant_confirmed_fraud_rate": 0.15515608619603966,
+    "customer_cold_start": 0.0,
+    "merchant_cold_start": 0.0,
+    "history_unavailable": 0.0
+  },
+  "categorical_js_divergence": {
+    "merchant_category": 7.199034728234294e-06,
+    "customer_state": 4.461278962108844e-05
+  },
+  "concept_drift_note": "Concept drift is assessed only after delayed labels arrive; feature drift alone does not prove performance loss."
+}

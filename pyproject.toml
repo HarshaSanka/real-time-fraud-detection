@@ -1,0 +1,117 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "real-time-fraud-detection"
+version = "0.1.0"
+description = "Production-oriented real-time fraud detection platform using Sparkov synthetic transactions."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { file = "LICENSE" }
+authors = [{ name = "Harsha Sanka" }]
+dependencies = [
+  "joblib>=1.4,<2",
+  "numpy>=2.0,<3",
+  "pandas>=2.2,<3",
+  "polars>=1.30,<2",
+  "pyarrow>=18,<24",
+  "pydantic>=2.10,<3",
+  "pydantic-settings>=2.7,<3",
+  "PyYAML>=6.0,<7",
+  "scikit-learn>=1.6,<2",
+  "scipy>=1.13,<2",
+  "structlog>=24.4,<26",
+  "typer>=0.15,<1",
+]
+
+[project.optional-dependencies]
+ml = [
+  "catboost>=1.2,<2",
+  "lightgbm>=4.5,<5",
+  "matplotlib>=3.9,<4",
+  "mlflow>=3.1,<4",
+  "optuna>=4.2,<5",
+  "seaborn>=0.13,<1",
+  "shap>=0.47,<1",
+  "xgboost>=2.1,<4",
+]
+platform = [
+  "confluent-kafka>=2.8,<3",
+  "fastapi>=0.115,<1",
+  "prometheus-client>=0.21,<1",
+  "psycopg[binary]>=3.2,<4",
+  "redis>=5.2,<7",
+  "sqlalchemy>=2.0,<3",
+  "uvicorn[standard]>=0.34,<1",
+]
+dashboard = [
+  "plotly>=5.24,<7",
+  "streamlit>=1.42,<2",
+]
+notebooks = [
+  "ipykernel>=6.29,<8",
+  "nbclient>=0.10,<1",
+  "nbconvert>=7.16,<8",
+  "nbformat>=5.10,<6",
+]
+dev = [
+  "fakeredis>=2.26,<3",
+  "httpx>=0.28,<1",
+  "mypy>=1.15,<2",
+  "pandas-stubs>=2.2,<3",
+  "pip-audit>=2.8,<3",
+  "pytest>=8.3,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+  "types-PyYAML>=6.0,<7",
+]
+all = [
+  "real-time-fraud-detection[ml,platform,dashboard,notebooks,dev]",
+]
+
+[project.scripts]
+fraud-detect = "fraud_detection.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fraud_detection"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["fraud_detection"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["fraud_detection"]
+
+[[tool.mypy.overrides]]
+module = ["joblib.*", "sklearn.*", "lightgbm.*", "xgboost.*", "catboost.*", "shap.*", "mlflow.*", "scipy.*", "plotly.*", "streamlit.*", "confluent_kafka.*", "fakeredis.*", "pyarrow.*", "redis.*", "seaborn.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --cov=fraud_detection --cov-report=term-missing"
+testpaths = ["tests"]
+markers = [
+  "integration: crosses package or service boundaries",
+  "full_data: requires the complete Sparkov dataset",
+  "container: requires Docker Compose",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["fraud_detection"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

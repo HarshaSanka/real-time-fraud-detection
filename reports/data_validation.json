@@ -1,0 +1,31 @@
+{
+  "rows": 1852394,
+  "fraud_rows": 9651,
+  "unique_transactions": 1852394,
+  "customers": 999,
+  "merchants": 693,
+  "minimum_timestamp": "2019-01-01 00:00:18",
+  "maximum_timestamp": "2020-12-31 23:59:34",
+  "minimum_amount": 1.0,
+  "maximum_amount": 28948.9,
+  "null_values": 0,
+  "fraud_rate": 0.005210014716091717,
+  "categories": [
+    "entertainment",
+    "food_dining",
+    "gas_transport",
+    "grocery_net",
+    "grocery_pos",
+    "health_fitness",
+    "home",
+    "kids_pets",
+    "misc_net",
+    "misc_pos",
+    "personal_care",
+    "shopping_net",
+    "shopping_pos",
+    "travel"
+  ],
+  "checks_passed": true,
+  "failures": []
+}

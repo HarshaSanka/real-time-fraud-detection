@@ -1,0 +1,16 @@
+{
+  "rows": 1852394,
+  "fraud_rows": 9651,
+  "fraud_rate": 0.005210014716091717,
+  "fraud_amount": 5121413.29,
+  "legitimate_amount": 124663918.72000001,
+  "customers": 999,
+  "merchants": 693,
+  "minimum_timestamp": "2019-01-01 00:00:18",
+  "maximum_timestamp": "2020-12-31 23:59:34",
+  "limitations": [
+    "Sparkov is simulated and does not represent bank production traffic.",
+    "The dataset has no channel, payment method, device, chargeback workflow, or country field.",
+    "Labels are generator outputs; the platform simulates a seven-day availability delay."
+  ]
+}

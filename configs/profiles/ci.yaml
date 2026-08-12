@@ -1,0 +1,9 @@
+profile: ci
+data:
+  maximum_rows: 10000
+model:
+  tuning_trials: 1
+  tuning_sample_rows: 8000
+  random_forest_estimators: 20
+execution:
+  max_threads: 2
