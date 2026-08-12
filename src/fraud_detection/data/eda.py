@@ -15,7 +15,10 @@ from fraud_detection.utils.config import Settings, project_root
 def generate_eda(settings: Settings) -> dict[str, Any]:
     root = project_root()
     source = root / "data/processed" / f"transactions_{settings.profile}.parquet"
-    output = root / "reports/eda"
+    reports = root / "reports"
+    if settings.profile != "portfolio":
+        reports = reports / settings.profile
+    output = reports / "eda"
     output.mkdir(parents=True, exist_ok=True)
     data = pl.read_parquet(source).with_columns(
         pl.col("event_timestamp").dt.hour().alias("hour"),

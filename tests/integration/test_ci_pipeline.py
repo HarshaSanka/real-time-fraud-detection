@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from fraud_detection.api.main import app
+from fraud_detection.data.eda import generate_eda
 from fraud_detection.features.pipeline import build_features
 from fraud_detection.monitoring.workflow import run_drift_monitor
 from fraud_detection.training.train import run_benchmark
@@ -23,6 +24,8 @@ def ci_bundle() -> dict[str, object]:
         check=True,
     )
     settings = load_settings("ci")
+    eda = generate_eda(settings)
+    assert eda["rows"] == 10_000
     build_features(settings, batch_size=2000)
     result = run_benchmark(settings)
     run_drift_monitor(settings)
