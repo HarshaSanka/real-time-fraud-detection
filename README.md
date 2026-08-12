@@ -29,6 +29,7 @@ delayed-label monitoring, and human-gated retraining.
 | Champion operations | 92.79% recall; 60.19% precision; 97.61% fraud-dollar capture |
 | Champion volume | 0.19% review; 0.40% block |
 | Calibration | Isotonic; Brier 0.000848; expected calibration error 0.000385 |
+| Public CI | [Run #3](https://github.com/HarshaSanka/real-time-fraud-detection/actions/runs/31650537957) passed quality, security audit, image/Compose, and 20-event streaming smoke gates |
 
 All costs are simulated. Test metrics are reporting-only and do not select or promote a
 model. Detailed evidence lives in [`reports/benchmark_summary.json`](reports/benchmark_summary.json)
@@ -177,9 +178,11 @@ Redis, PostgreSQL, outbox publisher, MLflow, Prometheus, Grafana, and Streamlit.
 - Prometheus: `http://localhost:9090`
 - Grafana: `http://localhost:3000`
 
-Docker is unavailable on the development Mac used for the full model run. Container and actual
-Kafka→Redis→model→PostgreSQL→outbox verification therefore belongs to GitHub Actions and is
-claimed only when the public workflow is green.
+Docker is unavailable on the development Mac used for the full model run. GitHub Actions is
+therefore the authoritative container environment. Public [CI run
+#3](https://github.com/HarshaSanka/real-time-fraud-detection/actions/runs/31650537957)
+passed the runtime image and Compose gates, reached API readiness, replayed 20 Kafka events,
+and verified prediction persistence, Redis state, and outbox publication.
 
 ## Monitoring and governance
 
@@ -228,7 +231,8 @@ jupyter nbconvert --execute --to notebook --inplace notebooks/01_fraud_eda.ipynb
 
 GitHub Actions also audits dependencies, builds the runtime image, validates Compose, waits for
 readiness, and exercises an actual Kafka→Redis→model→PostgreSQL→prediction/outbox path. Raw
-Sparkov files, secrets, databases, and large model binaries remain untracked.
+Sparkov files, secrets, databases, and large model binaries remain untracked. See the committed
+[public CI verification record](reports/ci_verification.md).
 
 ## Repository tour
 

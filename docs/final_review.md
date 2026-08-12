@@ -15,13 +15,13 @@ possible.
 
 ## Quality gate 2 — ML platform reviewer
 
-**Pass locally; container status follows public CI.** Offline/online replay tests assert feature
-parity and retries are idempotent. A missing Redis state path marks history unavailable and
-enforces at least review. PostgreSQL combines prediction persistence and Kafka outbox creation
-in one transaction. Corrupt events are sanitized to a DLQ. Model metadata pins feature/data
-hashes, thresholds, calibration, cutoff, and version. Delayed labels and human-gated
-champion/challenger requests are implemented. The reference Redis engine uses a global lock;
-real scale requires partitioned state processing.
+**Pass locally and in public CI.** Offline/online replay tests assert feature parity and retries
+are idempotent. A missing Redis state path marks history unavailable and enforces at least
+review. PostgreSQL combines prediction persistence and Kafka outbox creation in one transaction.
+Corrupt events are sanitized to a DLQ. Model metadata pins feature/data hashes, thresholds,
+calibration, cutoff, and version. Delayed labels and human-gated champion/challenger requests
+are implemented. Public CI run #3 passed a 20-event Kafka→Redis→model→PostgreSQL→outbox flow.
+The reference Redis engine uses a global lock; real scale requires partitioned state processing.
 
 ## Quality gate 3 — hiring manager
 
@@ -41,7 +41,7 @@ credentials, model binary, bank impact, or unmeasured scale claim is published.
 | MLOps | 8/10 | MLflow lineage/registry, drift, retraining request, dashboards, CI; no real cloud deployment or long-running scheduler. |
 | Real-Time Systems | 8/10 | Kafka KRaft, Redis, PostgreSQL outbox, DLQ and retries; single-node reference and no distributed load result. |
 | Documentation | 9/10 | Architecture, data contract, model card, monitoring, security, interview guide, generated reports. |
-| GitHub Portfolio Quality | 9/10 | Recruiter-first README, plots, CI, Compose, measured claims; screenshots/container evidence depend on public CI. |
+| GitHub Portfolio Quality | 9/10 | Recruiter-first README, plots, passing public CI and Compose smoke evidence, and measured claims. |
 | Interview Defensibility | 9/10 | Decisions, constraints, limitations, leakage boundaries, and exact metrics are committed and internally consistent. |
 
 ## Remaining honest gaps
