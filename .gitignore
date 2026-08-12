@@ -6,7 +6,9 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+catboost_info/
 .coverage
+coverage.xml
 htmlcov/
 build/
 dist/
@@ -21,4 +23,5 @@ mlruns/
 mlflow.db
 predictions/*.db
 reports/tmp/
+reports/ci/
 *.log

@@ -1,0 +1,25 @@
+{
+  "champion": "random_forest",
+  "version": "fraud-random_forest-20260812225357",
+  "status": "champion",
+  "selection_basis": "validation PR-AUC plus June threshold-window business policy only",
+  "selection_metrics": {
+    "pr_auc": 0.959051039940094,
+    "expected_cost": 6249.566,
+    "review_rate": 0.0018222196913615,
+    "block_rate": 0.0052388816126644,
+    "fraud_dollar_capture": 0.9832367394787176,
+    "feasible": true
+  },
+  "test_is_reporting_only": true,
+  "human_approval_required_for_replacement": true,
+  "registered_model": "fraud-detection",
+  "registered_version": 2,
+  "alias": "champion",
+  "champion_mlflow_run_id": "6624b81ee44c4796bc1bb6a2c13dad84",
+  "native_candidate_run_ids": {
+    "xgboost": "abf244c269cd4b52adcb54d07e6f3ad4",
+    "lightgbm": "4b5d3d05a48d4a9f80d96b29b0c9be1d",
+    "catboost": "d61f6ac10c26475f9c9d0c983f1e5b6e"
+  }
+}

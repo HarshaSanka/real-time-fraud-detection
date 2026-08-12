@@ -16,7 +16,7 @@ st.set_page_config(page_title="Fraud Operations", page_icon="🛡️", layout="w
 settings = load_settings()
 root = project_root()
 
-st.title("🛡️ Fraud Operations Command Center")
+st.title("🛡️ Fraud Operations")
 st.caption("Synthetic Sparkov demonstration — no real cardholder or banking data")
 
 
@@ -64,11 +64,11 @@ with overview:
         )
         st.plotly_chart(
             px.bar(decision_counts, x="decision", y="count", color="decision"),
-            use_container_width=True,
+            width="stretch",
         )
         st.plotly_chart(
             px.histogram(predictions, x="fraud_probability", nbins=40, color="decision"),
-            use_container_width=True,
+            width="stretch",
         )
 
 with model_tab:
@@ -90,7 +90,7 @@ with model_tab:
             ]
             if column in results
         ]
-        st.dataframe(results[available], use_container_width=True, hide_index=True)
+        st.dataframe(results[available], width="stretch", hide_index=True)
         pr_plot = root / "reports/plots/precision_recall_curve.png"
         if pr_plot.exists():
             st.image(str(pr_plot), caption="Sealed-test precision-recall curves")
@@ -108,7 +108,7 @@ with drift_tab:
         ).sort_values("PSI", ascending=False)
         st.plotly_chart(
             px.bar(numeric.head(15), x="PSI", y="feature", orientation="h"),
-            use_container_width=True,
+            width="stretch",
         )
         st.caption(str(drift.get("concept_drift_note", "")))
 

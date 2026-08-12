@@ -88,6 +88,8 @@ def _plot_calibration(labels: np.ndarray, probabilities: np.ndarray, output: Pat
 def run_benchmark(settings: Settings) -> dict[str, Any]:
     root = project_root()
     reports = root / "reports"
+    if settings.profile != "portfolio":
+        reports = reports / settings.profile
     plots = reports / "plots"
     plots.mkdir(parents=True, exist_ok=True)
     data = load_splits(settings)
@@ -183,6 +185,14 @@ def run_benchmark(settings: Settings) -> dict[str, Any]:
             "training_seconds": training_seconds,
             "review_threshold": policy.review_threshold,
             "block_threshold": policy.block_threshold,
+            "selection_metrics": {
+                "pr_auc": float(tune_pr_auc),
+                "expected_cost": policy.expected_cost,
+                "review_rate": policy.review_rate,
+                "block_rate": policy.block_rate,
+                "fraud_dollar_capture": policy.fraud_dollar_capture,
+                "feasible": policy.feasible,
+            },
         }
         results[name] = result
         test_probabilities[name] = test_probability
@@ -203,17 +213,17 @@ def run_benchmark(settings: Settings) -> dict[str, Any]:
         )
         result["mlflow_run_id"] = run_id
 
-    logistic = results["logistic_regression"]
+    logistic = results["logistic_regression"]["selection_metrics"]
     accepted: list[str] = []
     promotion: dict[str, Any] = {}
     for name in MODEL_NAMES[1:]:
-        decision = evaluate_promotion(results[name], logistic)
+        decision = evaluate_promotion(results[name]["selection_metrics"], logistic)
         promotion[name] = {"accepted": decision.accepted, "reasons": decision.reasons}
         if decision.accepted:
             accepted.append(name)
     champion_name = min(
         accepted or ["logistic_regression"],
-        key=lambda name: float(results[name]["expected_cost"]),
+        key=lambda name: float(results[name]["selection_metrics"]["expected_cost"]),
     )
     champion = results[champion_name]
     champion_model, champion_calibrator = fitted[champion_name]
@@ -245,7 +255,8 @@ def run_benchmark(settings: Settings) -> dict[str, Any]:
     joblib.dump(champion_model, version_dir / "model.joblib")
     joblib.dump(champion_calibrator, version_dir / "calibrator.joblib")
     (version_dir / "metadata.json").write_text(metadata.model_dump_json(indent=2), encoding="utf-8")
-    current = root / "artifacts/model/current"
+    current_name = "ci" if settings.profile == "ci" else "current"
+    current = root / "artifacts/model" / current_name
     if current.exists():
         shutil.rmtree(current)
     shutil.copytree(version_dir, current)
@@ -267,6 +278,8 @@ def run_benchmark(settings: Settings) -> dict[str, Any]:
         "promotion": promotion,
         "results": results,
         "test_is_reporting_only": True,
+        "selection_basis": "validation PR-AUC plus June threshold-window business policy only",
+        "sealed_test_excluded_from_selection": True,
     }
     (reports / "benchmark_summary.json").write_text(
         json.dumps(summary, indent=2, default=str), encoding="utf-8"

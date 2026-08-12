@@ -1,0 +1,82 @@
+[
+  {
+    "feature": "numeric__amount",
+    "mean_absolute_shap": 0.08255337253934739
+  },
+  {
+    "feature": "numeric__log_amount",
+    "mean_absolute_shap": 0.07400914875880801
+  },
+  {
+    "feature": "numeric__customer_avg_amount_7d",
+    "mean_absolute_shap": 0.06075670786074544
+  },
+  {
+    "feature": "numeric__customer_confirmed_fraud_rate",
+    "mean_absolute_shap": 0.04857863490747584
+  },
+  {
+    "feature": "numeric__hour_cos",
+    "mean_absolute_shap": 0.040296891076015647
+  },
+  {
+    "feature": "numeric__amount_vs_customer_avg_30d",
+    "mean_absolute_shap": 0.032466469849083114
+  },
+  {
+    "feature": "numeric__hour_sin",
+    "mean_absolute_shap": 0.024642768280629283
+  },
+  {
+    "feature": "numeric__customer_amount_1h",
+    "mean_absolute_shap": 0.02295566064687596
+  },
+  {
+    "feature": "numeric__customer_avg_amount_30d",
+    "mean_absolute_shap": 0.02169106229117919
+  },
+  {
+    "feature": "categorical__merchant_category_gas_transport",
+    "mean_absolute_shap": 0.016576749728461647
+  },
+  {
+    "feature": "numeric__merchant_confirmed_fraud_rate",
+    "mean_absolute_shap": 0.013565585599891943
+  },
+  {
+    "feature": "numeric__time_since_previous_seconds",
+    "mean_absolute_shap": 0.010777657541241617
+  },
+  {
+    "feature": "numeric__merchant_avg_amount_30d",
+    "mean_absolute_shap": 0.009837212007227562
+  },
+  {
+    "feature": "categorical__merchant_category_grocery_pos",
+    "mean_absolute_shap": 0.009490500797602466
+  },
+  {
+    "feature": "numeric__travel_speed_kmh",
+    "mean_absolute_shap": 0.007705437494032936
+  },
+  {
+    "feature": "numeric__customer_transactions_24h",
+    "mean_absolute_shap": 0.005260375344791469
+  },
+  {
+    "feature": "numeric__log_city_population",
+    "mean_absolute_shap": 0.004608078113529135
+  },
+  {
+    "feature": "numeric__distance_from_previous_km",
+    "mean_absolute_shap": 0.004486245657328897
+  },
+  {
+    "feature": "categorical__merchant_category_shopping_pos",
+    "mean_absolute_shap": 0.004058371600253657
+  },
+  {
+    "feature": "numeric__home_merchant_distance_km",
+    "mean_absolute_shap": 0.003774619651348231
+  }
+]

@@ -13,7 +13,7 @@ from fraud_detection.training.data import load_splits, xy
 from fraud_detection.utils.config import Settings, project_root
 
 
-def generate_shap_artifacts(settings: Settings, sample_rows: int = 1000) -> dict[str, Any]:
+def generate_shap_artifacts(settings: Settings, sample_rows: int = 200) -> dict[str, Any]:
     import shap
 
     root = project_root()
@@ -25,16 +25,19 @@ def generate_shap_artifacts(settings: Settings, sample_rows: int = 1000) -> dict
     sample = test.sample(n=min(sample_rows, len(test)), random_state=int(settings.project["seed"]))
     x, _ = xy(sample)
     matrix = encoder.transform(x)
+    dense = matrix.toarray() if hasattr(matrix, "toarray") else np.asarray(matrix)
     feature_names = list(encoder.get_feature_names_out())
     output = root / "reports/explainability"
     output.mkdir(parents=True, exist_ok=True)
     try:
         explainer = shap.TreeExplainer(model)
-        values = explainer.shap_values(matrix)
+        values = explainer.shap_values(dense)
         if isinstance(values, list):
             values = values[-1]
-        dense = matrix.toarray() if hasattr(matrix, "toarray") else np.asarray(matrix)
-        importance = np.abs(np.asarray(values)).mean(axis=0)
+        values_array = np.asarray(values)
+        if values_array.ndim == 3:
+            values_array = values_array[:, :, -1]
+        importance = np.abs(values_array).mean(axis=0)
         top = np.argsort(importance)[-20:]
         ranking = [
             {"feature": feature_names[index], "mean_absolute_shap": float(importance[index])}
@@ -56,7 +59,7 @@ def generate_shap_artifacts(settings: Settings, sample_rows: int = 1000) -> dict
                 {
                     "feature": feature_names[index],
                     "value": float(dense[local_index, index]),
-                    "shap_value": float(np.asarray(values)[local_index, index]),
+                    "shap_value": float(values_array[local_index, index]),
                 }
                 for index in range(len(feature_names))
             ],

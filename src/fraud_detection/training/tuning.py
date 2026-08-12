@@ -39,7 +39,10 @@ def tune_models(
         train_x, train_y, settings.model.tuning_sample_rows, seed
     )
     output: dict[str, dict[str, Any]] = {}
-    reports = project_root() / "reports/tuning"
+    reports = project_root() / "reports"
+    if settings.profile != "portfolio":
+        reports = reports / settings.profile
+    reports = reports / "tuning"
     reports.mkdir(parents=True, exist_ok=True)
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     for model_name in ["xgboost", "lightgbm"]:

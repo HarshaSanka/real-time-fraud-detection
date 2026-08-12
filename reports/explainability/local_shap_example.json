@@ -1,0 +1,52 @@
+[
+  {
+    "feature": "numeric__amount",
+    "value": 6.1954330491300995,
+    "shap_value": 0.1452397167129782
+  },
+  {
+    "feature": "numeric__log_amount",
+    "value": 5.348364367699681,
+    "shap_value": 0.11235953364526667
+  },
+  {
+    "feature": "numeric__customer_avg_amount_7d",
+    "value": 3.2073000054559224,
+    "shap_value": 0.0803875812223022
+  },
+  {
+    "feature": "numeric__amount_vs_customer_avg_30d",
+    "value": 4.228363805046454,
+    "shap_value": 0.0764853812549402
+  },
+  {
+    "feature": "numeric__customer_amount_1h",
+    "value": 8.35616863769414,
+    "shap_value": 0.06937412666015784
+  },
+  {
+    "feature": "numeric__hour_cos",
+    "value": 1.3822532900610387,
+    "shap_value": 0.05138171426229254
+  },
+  {
+    "feature": "numeric__merchant_transactions_24h",
+    "value": 4.293664743052661,
+    "shap_value": -0.026178943827122596
+  },
+  {
+    "feature": "numeric__travel_speed_kmh",
+    "value": 0.010750800342914951,
+    "shap_value": -0.02477417348744386
+  },
+  {
+    "feature": "numeric__hour_sin",
+    "value": -0.30001930561867496,
+    "shap_value": 0.017195516480797146
+  },
+  {
+    "feature": "numeric__customer_avg_amount_30d",
+    "value": 2.8876757866410623,
+    "shap_value": -0.016439306819658203
+  }
+]

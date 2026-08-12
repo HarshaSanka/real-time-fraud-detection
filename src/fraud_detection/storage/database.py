@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 from sqlalchemy import (
     Boolean,
@@ -76,6 +77,10 @@ class OutboxEvent(Base):
 
 class PredictionStore:
     def __init__(self, database_url: str) -> None:
+        if database_url.startswith("sqlite:///"):
+            database_path = Path(database_url.removeprefix("sqlite:///"))
+            if str(database_path) != ":memory:":
+                database_path.parent.mkdir(parents=True, exist_ok=True)
         connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
         self.engine = create_engine(database_url, connect_args=connect_args)
         Base.metadata.create_all(self.engine)

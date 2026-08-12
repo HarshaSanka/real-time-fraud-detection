@@ -39,7 +39,7 @@ dashboard:
 	streamlit run dashboards/app.py
 
 mlflow:
-	mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts/mlflow --port 5000
+	docker compose up mlflow
 
 monitor:
 	fraud-detect monitor run

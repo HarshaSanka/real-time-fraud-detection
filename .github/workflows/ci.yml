@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality-and-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install project
+        run: python -m pip install --upgrade pip && python -m pip install -e '.[all]'
+      - name: Formatting
+        run: ruff format --check src tests dashboards scripts
+      - name: Linting
+        run: ruff check src tests dashboards scripts
+      - name: Type checking
+        run: mypy src scripts
+      - name: Unit and integration tests
+        run: pytest tests -m "not full_data and not container" --cov=fraud_detection --cov-report=term-missing --cov-fail-under=80
+      - name: CI feature and model smoke run
+        run: |
+          python scripts/create_ci_fixture.py
+          python scripts/build_eda_notebook.py
+          jupyter nbconvert --execute --to notebook --inplace notebooks/01_fraud_eda.ipynb
+          fraud-detect features build --profile ci
+          fraud-detect train benchmark --profile ci
+      - name: Dependency vulnerability audit
+        run: pip-audit
+
+  container-and-streaming-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FRAUD_MODEL_BUNDLE: artifacts/model/ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build CI model fixture
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[all]'
+          python scripts/create_ci_fixture.py
+          fraud-detect features build --profile ci
+          fraud-detect train benchmark --profile ci
+      - name: Build runtime image and validate Compose
+        run: docker compose build && docker compose config --quiet
+      - name: Start platform
+        run: docker compose up --detach postgres redis kafka topic-init api consumer outbox labels
+      - name: Wait for API readiness
+        run: |
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:8000/ready >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+      - name: Kafka to Redis to model to PostgreSQL smoke flow
+        run: |
+          docker compose run --rm api fraud-detect stream replay --profile ci --limit 20 --rate 100
+          sleep 10
+          test "$(docker compose exec -T postgres psql -U fraud -d fraud_detection -tAc 'select count(*) from predictions')" -ge 20
+          test "$(docker compose exec -T postgres psql -U fraud -d fraud_detection -tAc 'select count(*) from outbox_events where published_at is not null')" -ge 1
+          docker compose exec -T redis redis-cli exists fraud:feature-engine:v1 | grep 1
+      - name: Compose logs on failure
+        if: failure()
+        run: docker compose logs
+      - name: Stop platform
+        if: always()
+        run: docker compose down --volumes

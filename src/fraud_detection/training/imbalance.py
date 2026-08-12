@@ -73,7 +73,9 @@ def compare_imbalance_strategies(
             }
         )
     reports = project_root() / "reports"
-    reports.mkdir(exist_ok=True)
+    if settings.profile != "portfolio":
+        reports = reports / settings.profile
+    reports.mkdir(parents=True, exist_ok=True)
     (reports / "imbalance_comparison.json").write_text(
         json.dumps(
             {

@@ -46,6 +46,7 @@ class InMemoryFeatureStore:
     def __init__(self, label_delay_days: int = 7, degraded: bool = False) -> None:
         self.engine = StreamingFeatureEngine(label_delay_days)
         self.snapshots: dict[str, dict[str, float]] = {}
+        self.applied_labels: set[str] = set()
         self.degraded = degraded
 
     def get_and_update(self, event: TransactionEventV1) -> FeatureResult:
@@ -59,7 +60,10 @@ class InMemoryFeatureStore:
     def apply_label(
         self, transaction_id: str, customer_id: str, merchant_id: str, is_fraud: bool
     ) -> None:
+        if transaction_id in self.applied_labels:
+            return
         self.engine.apply_observed_label(customer_id, merchant_id, int(is_fraud))
+        self.applied_labels.add(transaction_id)
 
 
 class RedisFeatureStore:
@@ -105,6 +109,9 @@ class RedisFeatureStore:
     ) -> None:
         try:
             with self.client.lock("fraud:feature-engine:lock", timeout=10, blocking_timeout=2):
+                label_key = f"fraud:label-applied:{transaction_id}"
+                if self.client.get(label_key):
+                    return
                 payload = self.client.get("fraud:feature-engine:v1")
                 engine = (
                     pickle.loads(cast(bytes, payload))
@@ -112,7 +119,10 @@ class RedisFeatureStore:
                     else StreamingFeatureEngine(self.label_delay_days)
                 )
                 engine.apply_observed_label(customer_id, merchant_id, int(is_fraud))
-                self.client.set("fraud:feature-engine:v1", pickle.dumps(engine))
+                pipeline = self.client.pipeline(transaction=True)
+                pipeline.set("fraud:feature-engine:v1", pickle.dumps(engine))
+                pipeline.set(label_key, b"1")
+                pipeline.execute()
         except Exception as error:
             raise FeatureStoreUnavailableError("Redis label update failed") from error
 

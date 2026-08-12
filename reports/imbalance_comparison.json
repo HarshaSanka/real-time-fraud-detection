@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "strategy": "unweighted",
+      "training_rows": 250000,
+      "training_fraud_rate": 0.02088,
+      "tune_pr_auc": 0.5770622566861352
+    },
+    {
+      "strategy": "class_weight",
+      "training_rows": 250000,
+      "training_fraud_rate": 0.02088,
+      "tune_pr_auc": 0.3715585945604982
+    },
+    {
+      "strategy": "undersampling",
+      "training_rows": 109620,
+      "training_fraud_rate": 0.047619047619047616,
+      "tune_pr_auc": 0.5027728082689835
+    },
+    {
+      "strategy": "oversampling",
+      "training_rows": 269258,
+      "training_fraud_rate": 0.09090909090909091,
+      "tune_pr_auc": 0.4592471168341422
+    }
+  ],
+  "smote": {
+    "status": "excluded",
+    "reason": "Interpolating mixed categorical, geographic, and historical state can create impossible financial transactions."
+  }
+}

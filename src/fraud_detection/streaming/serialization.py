@@ -34,7 +34,8 @@ def dead_letter(
     return DeadLetterEventV1(
         source_topic=source_topic,
         error_type=type(error).__name__,
-        error_message=str(error)[:500],
+        # Exception details may echo request fields; retain only the generic first line.
+        error_message=(str(error).splitlines()[0] or "event validation failed")[:200],
         received_at=datetime.now(UTC),
         trace_id=trace_id,
         sanitized_payload=sanitized,

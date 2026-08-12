@@ -14,6 +14,7 @@ from fraud_detection.explainability.shap_explainer import generate_shap_artifact
 from fraud_detection.features.pipeline import build_features
 from fraud_detection.monitoring.workflow import run_drift_monitor
 from fraud_detection.streaming.consumer import run_consumer
+from fraud_detection.streaming.labels import run_label_consumer
 from fraud_detection.streaming.outbox import publish_pending
 from fraud_detection.streaming.producer import replay
 from fraud_detection.training.train import run_benchmark
@@ -90,6 +91,11 @@ def stream_consume(profile: str = "demo") -> None:
 @stream_app.command("outbox")
 def stream_outbox(profile: str = "demo", once: bool = False) -> None:
     _show({"published": publish_pending(load_settings(profile), once)})
+
+
+@stream_app.command("labels")
+def stream_labels(profile: str = "demo") -> None:
+    run_label_consumer(load_settings(profile))
 
 
 @monitor_app.command("run")

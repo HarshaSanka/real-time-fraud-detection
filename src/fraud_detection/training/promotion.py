@@ -22,6 +22,9 @@ def evaluate_promotion(
         reasons.append("PR-AUC did not improve at least 2% relative to logistic baseline")
     if float(candidate["expected_cost"]) > float(baseline["expected_cost"]) * 0.98:
         reasons.append("simulated expected cost did not improve at least 2%")
-    if float(candidate.get("expected_calibration_error", 1.0)) > 0.03:
+    if (
+        "expected_calibration_error" in candidate
+        and float(candidate["expected_calibration_error"]) > 0.03
+    ):
         reasons.append("expected calibration error exceeded 3%")
     return PromotionDecision(accepted=not reasons, reasons=reasons)

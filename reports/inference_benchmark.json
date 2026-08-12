@@ -1,0 +1,41 @@
+{
+  "benchmark_type": "in-process FastAPI ASGI",
+  "dependencies": {
+    "redis": false,
+    "postgresql": false,
+    "kafka": false
+  },
+  "platform": "macOS-26.6.1-arm64-arm-64bit-Mach-O",
+  "python": "3.13.14",
+  "model_version": "fraud-random_forest-20260812225357",
+  "results": [
+    {
+      "concurrency": 1,
+      "requests": 200,
+      "p50_latency_ms": 31.444812499103136,
+      "p95_latency_ms": 33.45979229925433,
+      "p99_latency_ms": 36.61622618354153,
+      "throughput_requests_per_second": 31.6350963361043,
+      "errors": 0
+    },
+    {
+      "concurrency": 4,
+      "requests": 200,
+      "p50_latency_ms": 82.04160451714415,
+      "p95_latency_ms": 97.45979375002207,
+      "p99_latency_ms": 112.56432038906495,
+      "throughput_requests_per_second": 48.371958102980116,
+      "errors": 0
+    },
+    {
+      "concurrency": 16,
+      "requests": 200,
+      "p50_latency_ms": 333.98802050214726,
+      "p95_latency_ms": 428.1946097355101,
+      "p99_latency_ms": 573.2166854167002,
+      "throughput_requests_per_second": 46.61079146603991,
+      "errors": 0
+    }
+  ],
+  "limitations": "This is not a distributed or production load test."
+}
